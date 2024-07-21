@@ -54,6 +54,11 @@ func NewAccessor[AccType any](
 	acc.DataAccessor = *generalaccessor.NewDataAccessor(
 		dataAccessor,
 		func(src *models.RTBAccessPoint) (accesspoint.Platformer, bool) {
+			if src.AccountID == 0 {
+				ctxlogger.Get(ctx).Error("access point without account",
+					zap.Uint64("access_point_id", src.ID))
+				return nil, false
+			}
 			accObj, _ := accountAccessor.AccountByID(src.AccountID)
 			accessPointModel := admodels.RTBAccessPointFromModel(src, accObj)
 			accessPoint, err := acc.newAccessPoint(ctx, accessPointModel)

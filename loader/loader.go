@@ -83,7 +83,7 @@ func (l *PeriodicDataAccessor[T]) Data() ([]*T, error) {
 
 	l.mx.Lock()
 	defer l.mx.Unlock()
-	if l.NeedUpdate() {
+	if !l.NeedUpdate() {
 		return l.data, nil
 	}
 

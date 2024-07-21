@@ -3,7 +3,6 @@ package fsloader
 import (
 	"encoding/json"
 	"errors"
-	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -48,12 +47,7 @@ func loadFile(filename string, target any) error {
 	default:
 		return nil // Skip unsupported
 	}
-	f, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	data, err := io.ReadAll(f)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
