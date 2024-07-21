@@ -21,8 +21,7 @@ func NewZoneAccessor[AccType any](dataAccessor loader.DataAccessor[models.Zone],
 			dataAccessor,
 			func(st *models.Zone) (admodels.Target, bool) {
 				acc, _ := accountAccessor.AccountByID(st.AccountID)
-				trg := admodels.TargetFromModel(st)
-				trg.SetAccount(acc)
+				trg := admodels.TargetFromModel(st, acc)
 				return trg, true
 			},
 		),
