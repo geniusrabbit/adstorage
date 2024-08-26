@@ -36,6 +36,6 @@ func ConnectAllAccessors[AccType any](ctx context.Context, urlConnect string, ac
 }
 
 // Register new data accessor
-func Register[AccType any](scheme string, fnk DataLoaderConnectFnk) {
+func Register(scheme string, fnk DataLoaderConnectFnk) {
 	dataLoaderAccessor[scheme] = fnk
 }

@@ -18,7 +18,7 @@ import (
 // RegisterAllSchemas for all supported dialects
 func RegisterAllSchemas[AccType any]() {
 	for _, dialect := range database.ListOfDialects() {
-		Register[AccType](dialect, DBDataAccessor[AccType])
+		Register(dialect, DBDataAccessor[AccType])
 	}
 }
 
