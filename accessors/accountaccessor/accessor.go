@@ -11,7 +11,7 @@ type AccountConvertFunc[AT any] generalaccessor.ObjectConvertFunc[AT, *admodels.
 
 // AccountAccessor provides accessor to the admodel company type
 type AccountAccessor[AT any] struct {
-	generalaccessor.DataAccessor[*admodels.Account, AT]
+	generalaccessor.DataAccessor[*admodels.Account, uint64, AT]
 }
 
 // NewAccessor from dataAccessor
@@ -31,5 +31,5 @@ func (acc *AccountAccessor[AT]) CompanyList() ([]*admodels.Account, error) {
 
 // AccountByID returns account object with specific ID
 func (acc *AccountAccessor[AT]) AccountByID(id uint64) (*admodels.Account, error) {
-	return acc.ByID(id)
+	return acc.ByKey(id)
 }

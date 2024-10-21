@@ -28,7 +28,7 @@ type SourceFactory interface {
 
 // Accessor object ad reloader
 type Accessor[AccType any] struct {
-	generalaccessor.DataAccessor[adtype.Source, models.RTBSource]
+	generalaccessor.DataAccessor[adtype.Source, uint64, models.RTBSource]
 
 	factories   map[string]SourceFactory
 	factoryList []SourceFactory
@@ -94,7 +94,7 @@ func (acc *Accessor[AT]) Iterator(request *adtype.BidRequest) adtype.SourceItera
 
 // SourceByID returns source instance
 func (acc *Accessor[AT]) SourceByID(id uint64) (adtype.Source, error) {
-	return acc.ByID(id)
+	return acc.ByKey(id)
 }
 
 func (acc *Accessor[AT]) newSource(ctx context.Context, src *admodels.RTBSource) (adtype.Source, error) {

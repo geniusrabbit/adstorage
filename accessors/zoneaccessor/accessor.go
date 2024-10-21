@@ -11,7 +11,7 @@ import (
 
 // ZoneAccessor provides accessor to the admodel company type
 type ZoneAccessor struct {
-	generalaccessor.DataAccessor[admodels.Target, models.Zone]
+	generalaccessor.DataAccessor[admodels.Target, string, models.Zone]
 }
 
 // NewZoneAccessor from dataAccessor
@@ -33,7 +33,7 @@ func (acc *ZoneAccessor) ZoneList() ([]admodels.Target, error) {
 	return acc.List()
 }
 
-// TargetByID returns campaign object with specific ID
-func (acc *ZoneAccessor) TargetByID(id uint64) (admodels.Target, error) {
-	return acc.ByID(id)
+// TargetByCodename returns campaign object with specific codename
+func (acc *ZoneAccessor) TargetByCodename(codename string) (admodels.Target, error) {
+	return acc.ByKey(codename)
 }

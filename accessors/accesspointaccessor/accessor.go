@@ -23,7 +23,7 @@ var (
 
 // Accessor object ad reloader
 type Accessor struct {
-	generalaccessor.DataAccessor[accesspoint.Platformer, models.RTBAccessPoint]
+	generalaccessor.DataAccessor[accesspoint.Platformer, uint64, models.RTBAccessPoint]
 
 	factories   map[string]accesspoint.Factory
 	factoryList []accesspoint.Factory

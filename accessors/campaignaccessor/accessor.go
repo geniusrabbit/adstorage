@@ -12,7 +12,7 @@ import (
 
 // CampaignAccessor provides accessor to the admodel company type
 type CampaignAccessor struct {
-	generalaccessor.DataAccessor[*admodels.Campaign, models.Campaign]
+	generalaccessor.DataAccessor[*admodels.Campaign, uint64, models.Campaign]
 }
 
 // NewCampaignAccessor from dataAccessor
@@ -37,5 +37,5 @@ func (acc *CampaignAccessor) CampaignList() ([]*admodels.Campaign, error) {
 
 // CampaignByID returns campaign object with specific ID
 func (acc *CampaignAccessor) CampaignByID(id uint64) (*admodels.Campaign, error) {
-	return acc.ByID(id)
+	return acc.ByKey(id)
 }
