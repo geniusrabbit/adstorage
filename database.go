@@ -55,6 +55,11 @@ func (acc *dbAccessor[AccType]) Campaigns() (loader.DataAccessor[models.Campaign
 		acc.period, acc.period*10, "loader_campaigns"), nil
 }
 
+func (acc *dbAccessor[AccType]) Apps() (loader.DataAccessor[models.Application], error) {
+	return loader.NewPeriodicReloader(&dbtypes.ApplicationList{}, dbloader.Loader(acc.db),
+		acc.period, acc.period*10, "loader_apps"), nil
+}
+
 func (acc *dbAccessor[AccType]) Zones() (loader.DataAccessor[models.Zone], error) {
 	return loader.NewPeriodicReloader(&dbtypes.ZoneList{}, dbloader.Loader(acc.db),
 		acc.period, acc.period*10, "loader_zones"), nil

@@ -74,6 +74,13 @@ func (acc *fsAccessor[AccType]) Campaigns() (loader.DataAccessor[models.Campaign
 		acc.period, acc.period*10, "loader_campaigns"), nil
 }
 
+func (acc *fsAccessor[AccType]) Apps() (loader.DataAccessor[models.Application], error) {
+	return loader.NewPeriodicReloader(
+		&fstypes.ApplicationData{},
+		fsloader.PatternLoader(acc.rootDir, "app*"),
+		acc.period, acc.period*10, "loader_apps"), nil
+}
+
 func (acc *fsAccessor[AccType]) Zones() (loader.DataAccessor[models.Zone], error) {
 	return loader.NewPeriodicReloader(
 		&fstypes.ZoneData{},
