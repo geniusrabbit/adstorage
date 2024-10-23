@@ -9,6 +9,7 @@ import (
 	"github.com/geniusrabbit/adstorage/accessors/accesspointaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/accountaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/adsourceaccessor"
+	"github.com/geniusrabbit/adstorage/accessors/appaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/campaignaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/formataccessor"
 	"github.com/geniusrabbit/adstorage/accessors/zoneaccessor"
@@ -21,6 +22,7 @@ type AllAccessor[AccType any] struct {
 	formats     types.FormatsAccessor
 	accountCast accountaccessor.AccountConvertFunc[AccType]
 	accounts    *accountaccessor.AccountAccessor[AccType]
+	apps        *appaccessor.AppAccessor
 	zones       *zoneaccessor.ZoneAccessor
 	campaigns   *campaignaccessor.CampaignAccessor
 }
@@ -55,6 +57,22 @@ func (acc *AllAccessor[AccType]) Accounts() (*accountaccessor.AccountAccessor[Ac
 	}
 	acc.accounts = accountaccessor.NewAccessor(accountDataAccessor, acc.accountCast)
 	return acc.accounts, nil
+}
+
+func (acc *AllAccessor[AccType]) Apps() (*appaccessor.AppAccessor, error) {
+	if acc.apps != nil {
+		return acc.apps, nil
+	}
+	accounts, err := acc.Accounts()
+	if err != nil {
+		return nil, err
+	}
+	appDataAccessor, err := acc.accessors.Apps()
+	if err != nil {
+		return nil, err
+	}
+	acc.apps = appaccessor.NewAppAccessor(appDataAccessor, accounts)
+	return acc.apps, nil
 }
 
 func (acc *AllAccessor[AccType]) Zones() (*zoneaccessor.ZoneAccessor, error) {
