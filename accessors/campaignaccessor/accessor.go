@@ -10,13 +10,15 @@ import (
 	"github.com/geniusrabbit/adstorage/loader"
 )
 
+type CampaignPrepareFunc func(c *admodels.Campaign)
+
 // CampaignAccessor provides accessor to the admodel company type
 type CampaignAccessor struct {
 	generalaccessor.DataAccessor[*admodels.Campaign, uint64, models.Campaign]
 }
 
 // NewCampaignAccessor from dataAccessor
-func NewCampaignAccessor[AccType any](dataAccessor loader.DataAccessor[models.Campaign], accountAccessor *accountaccessor.AccountAccessor[AccType], formatAccessor types.FormatsAccessor) *CampaignAccessor {
+func NewCampaignAccessor[AccType any](dataAccessor loader.DataAccessor[models.Campaign], accountAccessor *accountaccessor.AccountAccessor[AccType], formatAccessor types.FormatsAccessor, prepareFunc CampaignPrepareFunc) *CampaignAccessor {
 	return &CampaignAccessor{
 		DataAccessor: *generalaccessor.NewDataAccessor(
 			dataAccessor,
@@ -24,6 +26,9 @@ func NewCampaignAccessor[AccType any](dataAccessor loader.DataAccessor[models.Ca
 				acc, _ := accountAccessor.AccountByID(c.AccountID)
 				camp := admodels.CampaignFromModel(c, formatAccessor)
 				camp.SetAccount(acc)
+				if prepareFunc != nil {
+					prepareFunc(camp)
+				}
 				return camp, true
 			},
 		),

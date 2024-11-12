@@ -97,6 +97,9 @@ func (l *PeriodicDataAccessor[T]) Data() ([]*T, error) {
 	}
 
 	if err := l.loader(l.target, &lastUpdate); err != nil {
+		zap.L().Error("data loading error",
+			zap.String("model", reflect.TypeOf(l.target).String()),
+			zap.Error(err))
 		return nil, err
 	}
 

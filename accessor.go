@@ -91,7 +91,7 @@ func (acc *AllAccessor[AccType]) Zones() (*zoneaccessor.ZoneAccessor, error) {
 	return acc.zones, nil
 }
 
-func (acc *AllAccessor[AccType]) Campaigns() (*campaignaccessor.CampaignAccessor, error) {
+func (acc *AllAccessor[AccType]) Campaigns(prepareFunc campaignaccessor.CampaignPrepareFunc) (*campaignaccessor.CampaignAccessor, error) {
 	if acc.campaigns != nil {
 		return acc.campaigns, nil
 	}
@@ -107,7 +107,7 @@ func (acc *AllAccessor[AccType]) Campaigns() (*campaignaccessor.CampaignAccessor
 	if err != nil {
 		return nil, err
 	}
-	acc.campaigns = campaignaccessor.NewCampaignAccessor(campaignDataAccessor, accounts, formats)
+	acc.campaigns = campaignaccessor.NewCampaignAccessor(campaignDataAccessor, accounts, formats, prepareFunc)
 	return acc.campaigns, nil
 }
 

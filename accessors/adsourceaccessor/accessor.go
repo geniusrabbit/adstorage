@@ -61,6 +61,13 @@ func NewAccessor[AccType any](ctx context.Context, dataAccessor loader.DataAcces
 				return nil, false
 			}
 			acc, _ := accountAccessor.AccountByID(src.AccountID)
+			if acc == nil {
+				ctxlogger.Get(ctx).Error("source without account object",
+					zap.Uint64("source_id", src.ID),
+					zap.Uint64("account_id", src.AccountID),
+				)
+				return nil, false
+			}
 			rtbSrc := admodels.RTBSourceFromModel(src, acc)
 			if src, err := accessor.newSource(ctx, rtbSrc); err == nil {
 				return src, true
