@@ -107,7 +107,7 @@ func (acc *Accessor) PlatformByProtocol(protocol, codename string) (accesspoint.
 	}
 	for _, plt := range list {
 		if plt.Codename() == codename {
-			if protocol != "" && plt.Protocol() != protocol {
+			if protocol != "" && !plt.IsProtocolSupported(protocol) {
 				return nil, errors.Wrap(errUnsupportedAccessPointProtocol, protocol)
 			}
 			return plt, nil
