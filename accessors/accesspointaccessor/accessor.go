@@ -44,7 +44,9 @@ func NewAccessor[AccType any](
 	}
 	factories := make(map[string]accesspoint.Factory, len(factoryList))
 	for _, fact := range factoryList {
-		factories[fact.Info().Protocol] = fact
+		for _, protocol := range fact.Info().AllProtocols {
+			factories[protocol] = fact
+		}
 	}
 	acc := &Accessor{
 		factories:   factories,
