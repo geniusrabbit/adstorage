@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/demdxx/gocast/v2 v2.9.0
 	github.com/demdxx/xtypes v0.2.0
-	github.com/geniusrabbit/adcorelib v0.0.0-20241023124230-6775195e5b14
+	github.com/geniusrabbit/adcorelib v0.0.0-20241116115850-85cd8333dc83
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.5
 	go.uber.org/zap v1.27.0
