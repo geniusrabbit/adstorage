@@ -5,13 +5,13 @@ go 1.23
 require (
 	github.com/demdxx/gocast/v2 v2.9.0
 	github.com/demdxx/xtypes v0.2.0
-	github.com/geniusrabbit/adcorelib v0.0.0-20241116125018-7a33f0a18264
+	github.com/geniusrabbit/adcorelib v0.0.0-20241128121601-cfc801fc5db5
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.5
 	go.uber.org/zap v1.27.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.7
-	gorm.io/driver/postgres v1.5.9
+	gorm.io/driver/postgres v1.5.10
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/driver/sqlserver v1.5.4
 	gorm.io/gorm v1.25.12
@@ -23,16 +23,17 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bkaradzic/go-lz4 v1.0.0 // indirect
 	github.com/bsm/openrtb v2.1.2+incompatible // indirect
+	github.com/bsm/openrtb/v3 v3.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/geniusrabbit/gogeo v0.0.0-20190430153311-59b5dca35b92 // indirect
 	github.com/geniusrabbit/gosql/v2 v2.3.1 // indirect
 	github.com/geniusrabbit/hourstable v0.0.0-20190430155716-2ecc19b9622f // indirect
-	github.com/geniusrabbit/udetect v0.0.0-20241116115730-b4f061e50395 // indirect
+	github.com/geniusrabbit/udetect v0.0.0-20241125135617-1dc5a0e98da2 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0 // indirect
 	github.com/guregu/null v4.0.0+incompatible // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
@@ -63,10 +64,12 @@ require (
 	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20241113202542-65e8d215514f // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241113202542-65e8d215514f // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20241118233622-e639e219e697 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241118233622-e639e219e697 // indirect
 	google.golang.org/grpc v1.68.0 // indirect
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
+
+replace google.golang.org/genproto => google.golang.org/genproto v0.0.0-20241118233622-e639e219e697
