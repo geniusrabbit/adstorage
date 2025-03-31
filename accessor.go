@@ -12,6 +12,7 @@ import (
 	"github.com/geniusrabbit/adstorage/accessors/appaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/campaignaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/formataccessor"
+	"github.com/geniusrabbit/adstorage/accessors/trafficrouteraccessor"
 	"github.com/geniusrabbit/adstorage/accessors/zoneaccessor"
 )
 
@@ -19,12 +20,13 @@ type AllAccessor[AccType any] struct {
 	ctx       context.Context
 	accessors AllDataAccessor[AccType]
 
-	formats     types.FormatsAccessor
-	accountCast accountaccessor.AccountConvertFunc[AccType]
-	accounts    *accountaccessor.AccountAccessor[AccType]
-	apps        *appaccessor.AppAccessor
-	zones       *zoneaccessor.ZoneAccessor
-	campaigns   *campaignaccessor.CampaignAccessor
+	formats        types.FormatsAccessor
+	accountCast    accountaccessor.AccountConvertFunc[AccType]
+	accounts       *accountaccessor.AccountAccessor[AccType]
+	apps           *appaccessor.AppAccessor
+	zones          *zoneaccessor.ZoneAccessor
+	campaigns      *campaignaccessor.CampaignAccessor
+	trafficRouters *trafficrouteraccessor.TrafficRouterAccessor
 }
 
 func NewAllAccessor[AccType any](ctx context.Context, accessors AllDataAccessor[AccType], accountCast accountaccessor.AccountConvertFunc[AccType]) *AllAccessor[AccType] {
@@ -111,7 +113,7 @@ func (acc *AllAccessor[AccType]) Campaigns(prepareFunc campaignaccessor.Campaign
 	return acc.campaigns, nil
 }
 
-func (acc *AllAccessor[AccType]) Sources(factories ...adsourceaccessor.SourceFactory) (*adsourceaccessor.Accessor[AccType], error) {
+func (acc *AllAccessor[AccType]) Sources(factories []adsourceaccessor.SourceFactory, opts ...adsourceaccessor.Option[AccType]) (*adsourceaccessor.Accessor[AccType], error) {
 	accounts, err := acc.Accounts()
 	if err != nil {
 		return nil, err
@@ -120,10 +122,10 @@ func (acc *AllAccessor[AccType]) Sources(factories ...adsourceaccessor.SourceFac
 	if err != nil {
 		return nil, err
 	}
-	return adsourceaccessor.NewAccessor(acc.ctx, sourceDataAccessor, accounts, factories...)
+	return adsourceaccessor.NewAccessor(acc.ctx, sourceDataAccessor, accounts, factories, opts...)
 }
 
-func (acc *AllAccessor[AccType]) AccessPoints(factoryList ...accesspoint.Factory) (*accesspointaccessor.Accessor, error) {
+func (acc *AllAccessor[AccType]) AccessPoints(factoryList []accesspoint.Factory) (*accesspointaccessor.Accessor, error) {
 	accounts, err := acc.Accounts()
 	if err != nil {
 		return nil, err
@@ -136,6 +138,18 @@ func (acc *AllAccessor[AccType]) AccessPoints(factoryList ...accesspoint.Factory
 		acc.ctx,
 		accesspointDataAccessor,
 		accounts,
-		factoryList...,
+		factoryList,
 	)
+}
+
+func (acc *AllAccessor[AccType]) TrafficRouters() (*trafficrouteraccessor.TrafficRouterAccessor, error) {
+	if acc.trafficRouters != nil {
+		return acc.trafficRouters, nil
+	}
+	trafficRouterDataAccessor, err := acc.accessors.TrafficRouters()
+	if err != nil {
+		return nil, err
+	}
+	acc.trafficRouters = trafficrouteraccessor.NewTrafficRouterAccessor(trafficRouterDataAccessor)
+	return acc.trafficRouters, nil
 }

@@ -34,7 +34,7 @@ func NewAccessor[AccType any](
 	ctx context.Context,
 	dataAccessor loader.DataAccessor[models.RTBAccessPoint],
 	accountAccessor *accountaccessor.AccountAccessor[AccType],
-	factoryList ...accesspoint.Factory,
+	factoryList []accesspoint.Factory,
 ) (*Accessor, error) {
 	if dataAccessor == nil {
 		return nil, errors.New("data accessor is required")

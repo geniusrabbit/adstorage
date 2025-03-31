@@ -74,3 +74,8 @@ func (acc *dbAccessor[AccType]) RTBAccessPoints() (loader.DataAccessor[models.RT
 	return loader.NewPeriodicReloader(&dbtypes.RTBAccessPointList{}, dbloader.Loader(acc.db),
 		acc.period, acc.period*10, "loader_access_points"), nil
 }
+
+func (acc *dbAccessor[AccType]) TrafficRouters() (loader.DataAccessor[models.TrafficRouter], error) {
+	return loader.NewPeriodicReloader(&dbtypes.TrafficRouterList{}, dbloader.Loader(acc.db),
+		acc.period, acc.period*10, "loader_traffic_routers"), nil
+}

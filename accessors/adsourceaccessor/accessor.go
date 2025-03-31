@@ -11,7 +11,6 @@ import (
 	"github.com/geniusrabbit/adcorelib/adtype"
 	"github.com/geniusrabbit/adcorelib/context/ctxlogger"
 	"github.com/geniusrabbit/adcorelib/models"
-	"github.com/geniusrabbit/adcorelib/platform/info"
 
 	"github.com/geniusrabbit/adstorage/accessors/accountaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/generalaccessor"
@@ -20,11 +19,11 @@ import (
 
 var errUnsupportedSourceProtocol = errors.New("unsupported source protocol")
 
-type SourceFactory interface {
-	New(ctx context.Context, source *admodels.RTBSource, opts ...any) (adtype.SourceTester, error)
-	Info() info.Platform
-	Protocols() []string
-}
+// CustomIteratorFnk is a function type for custom iterator
+type CustomIteratorFnk func(request *adtype.BidRequest, sources []adtype.Source) adtype.SourceIterator
+
+// SourceFactory is a source factory interface
+type SourceFactory = adtype.SourceFactory
 
 // Accessor object ad reloader
 type Accessor[AccType any] struct {
@@ -32,10 +31,19 @@ type Accessor[AccType any] struct {
 
 	factories   map[string]SourceFactory
 	factoryList []SourceFactory
+
+	// CustomIterator is a custom iterator function
+	customIterator CustomIteratorFnk
 }
 
 // NewAccessor object
-func NewAccessor[AccType any](ctx context.Context, dataAccessor loader.DataAccessor[models.RTBSource], accountAccessor *accountaccessor.AccountAccessor[AccType], factories ...SourceFactory) (*Accessor[AccType], error) {
+func NewAccessor[AccType any](
+	ctx context.Context,
+	dataAccessor loader.DataAccessor[models.RTBSource],
+	accountAccessor *accountaccessor.AccountAccessor[AccType],
+	factories []SourceFactory,
+	opts ...Option[AccType],
+) (*Accessor[AccType], error) {
 	if dataAccessor == nil {
 		return nil, errors.New("data accessor is required")
 	}
@@ -80,6 +88,9 @@ func NewAccessor[AccType any](ctx context.Context, dataAccessor loader.DataAcces
 			return nil, false
 		},
 	)
+	for _, opt := range opts {
+		opt(accessor)
+	}
 	return accessor, nil
 }
 
@@ -96,7 +107,10 @@ func (acc *Accessor[AT]) SourceList() ([]adtype.Source, error) {
 // Iterator returns the configured queue acc
 func (acc *Accessor[AT]) Iterator(request *adtype.BidRequest) adtype.SourceIterator {
 	list, _ := acc.SourceList()
-	return NewPriorityIterator(request, list)
+	if acc.customIterator != nil {
+		return acc.customIterator(request, list)
+	}
+	return NewLinearIterator(request, list)
 }
 
 // SourceByID returns source instance

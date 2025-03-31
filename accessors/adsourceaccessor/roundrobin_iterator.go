@@ -3,41 +3,18 @@
 package adsourceaccessor
 
 import (
+	"iter"
 	"math/rand"
 
 	"github.com/geniusrabbit/adcorelib/adtype"
 )
 
-type roundrobinIterator struct {
-	index    int
-	endIndex int
-	request  *adtype.BidRequest
-	sources  []adtype.Source
-}
-
 // NewRoundrobinIterator from request and source
-func NewRoundrobinIterator(request *adtype.BidRequest, sources []adtype.Source) adtype.SourceIterator {
+func NewRoundrobinIterator(request *adtype.BidRequest, sources []adtype.Source) iter.Seq2[float32, adtype.Source] {
 	startIndex := rand.Int() % len(sources)
-	return &roundrobinIterator{
+	return (&linearIterator{
+		started:  false,
 		index:    startIndex,
 		endIndex: startIndex,
-		request:  request,
-		sources:  sources,
-	}
+	}).setSourcesExt(request, sources).seq()
 }
-
-func (iter *roundrobinIterator) Next() adtype.Source {
-	if iter.index >= len(iter.sources) {
-		return nil
-	}
-	src := iter.sources[iter.index]
-	if iter.index++; iter.index > len(iter.sources) {
-		iter.index = 0
-	}
-	if iter.index == iter.endIndex {
-		return nil
-	}
-	return src
-}
-
-var _ adtype.SourceIterator = &roundrobinIterator{}
