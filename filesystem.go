@@ -67,13 +67,6 @@ func (acc *fsAccessor[AccType]) Accounts() (loader.DataAccessor[AccType], error)
 		acc.period, acc.period*10, "loader_accounts"), nil
 }
 
-func (acc *fsAccessor[AccType]) Campaigns() (loader.DataAccessor[models.Campaign], error) {
-	return loader.NewPeriodicReloader(
-		&fstypes.CampaignData{},
-		fsloader.PatternLoader(acc.rootDir, "campaign*"),
-		acc.period, acc.period*10, "loader_campaigns"), nil
-}
-
 func (acc *fsAccessor[AccType]) Apps() (loader.DataAccessor[models.Application], error) {
 	return loader.NewPeriodicReloader(
 		&fstypes.ApplicationData{},
@@ -107,4 +100,15 @@ func (acc *fsAccessor[AccType]) TrafficRouters() (loader.DataAccessor[models.Tra
 		&fstypes.TrafficRouterData{},
 		fsloader.PatternLoader(acc.rootDir, "traffic_router*"),
 		acc.period, acc.period*10, "loader_traffic_routers"), nil
+}
+
+//lint:ignore U1000 This method is used to ensure fsAccessor implements the required interface
+func (acc *fsAccessor[AccType]) __isFS() {}
+
+func (acc *fsAccessor[AccType]) getRoot() string {
+	return acc.rootDir
+}
+
+func (acc *fsAccessor[AccType]) gerPeriod() time.Duration {
+	return acc.period
 }

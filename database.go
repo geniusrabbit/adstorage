@@ -50,11 +50,6 @@ func (acc *dbAccessor[AccType]) Accounts() (loader.DataAccessor[AccType], error)
 		acc.period, acc.period*10, "loader_accounts"), nil
 }
 
-func (acc *dbAccessor[AccType]) Campaigns() (loader.DataAccessor[models.Campaign], error) {
-	return loader.NewPeriodicReloader(&dbtypes.CampaignList{}, dbloader.Loader(acc.db),
-		acc.period, acc.period*10, "loader_campaigns"), nil
-}
-
 func (acc *dbAccessor[AccType]) Apps() (loader.DataAccessor[models.Application], error) {
 	return loader.NewPeriodicReloader(&dbtypes.ApplicationList{}, dbloader.Loader(acc.db),
 		acc.period, acc.period*10, "loader_apps"), nil
@@ -78,4 +73,15 @@ func (acc *dbAccessor[AccType]) RTBAccessPoints() (loader.DataAccessor[models.RT
 func (acc *dbAccessor[AccType]) TrafficRouters() (loader.DataAccessor[models.TrafficRouter], error) {
 	return loader.NewPeriodicReloader(&dbtypes.TrafficRouterList{}, dbloader.Loader(acc.db),
 		acc.period, acc.period*10, "loader_traffic_routers"), nil
+}
+
+//lint:ignore U1000 This method is used to ensure dbAccessor implements the required interface
+func (*dbAccessor[AccType]) __isDB() {}
+
+func (acc *dbAccessor[AccType]) getDB() *database.DB {
+	return acc.db
+}
+
+func (acc *dbAccessor[AccType]) gerPeriod() time.Duration {
+	return acc.period
 }
