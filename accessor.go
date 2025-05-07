@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/geniusrabbit/adcorelib/accesspoint"
 	"github.com/geniusrabbit/adcorelib/admodels/types"
 
-	"github.com/geniusrabbit/adstorage/accessors/accesspointaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/accountaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/adsourceaccessor"
 	"github.com/geniusrabbit/adstorage/accessors/appaccessor"
@@ -139,23 +137,6 @@ func (acc *AllAccessor[AccType]) Sources(factories []adsourceaccessor.SourceFact
 		return nil, err
 	}
 	return adsourceaccessor.NewAccessor(acc.ctx, sourceDataAccessor, accounts, factories, opts...)
-}
-
-func (acc *AllAccessor[AccType]) AccessPoints(factoryList []accesspoint.Factory) (*accesspointaccessor.Accessor, error) {
-	accounts, err := acc.Accounts()
-	if err != nil {
-		return nil, err
-	}
-	accesspointDataAccessor, err := acc.accessors.RTBAccessPoints()
-	if err != nil {
-		return nil, err
-	}
-	return accesspointaccessor.NewAccessor(
-		acc.ctx,
-		accesspointDataAccessor,
-		accounts,
-		factoryList,
-	)
 }
 
 func (acc *AllAccessor[AccType]) TrafficRouters() (*trafficrouteraccessor.TrafficRouterAccessor, error) {

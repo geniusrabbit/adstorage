@@ -88,13 +88,6 @@ func (acc *fsAccessor[AccType]) RTBSources() (loader.DataAccessor[models.RTBSour
 		acc.period, acc.period*10, "loader_sources"), nil
 }
 
-func (acc *fsAccessor[AccType]) RTBAccessPoints() (loader.DataAccessor[models.RTBAccessPoint], error) {
-	return loader.NewPeriodicReloader(
-		&fstypes.RTBAccessPointData{},
-		fsloader.PatternLoader(acc.rootDir, "rtb_access_point*"),
-		acc.period, acc.period*10, "loader_access_points"), nil
-}
-
 func (acc *fsAccessor[AccType]) TrafficRouters() (loader.DataAccessor[models.TrafficRouter], error) {
 	return loader.NewPeriodicReloader(
 		&fstypes.TrafficRouterData{},

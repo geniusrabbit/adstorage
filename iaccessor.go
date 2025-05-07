@@ -13,6 +13,5 @@ type AllDataAccessor[AccType any] interface {
 	Apps() (loader.DataAccessor[models.Application], error)
 	Zones() (loader.DataAccessor[models.Zone], error)
 	RTBSources() (loader.DataAccessor[models.RTBSource], error)
-	RTBAccessPoints() (loader.DataAccessor[models.RTBAccessPoint], error)
 	TrafficRouters() (loader.DataAccessor[models.TrafficRouter], error)
 }

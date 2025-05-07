@@ -1,6 +1,6 @@
 module github.com/geniusrabbit/adstorage
 
-go 1.24.2
+go 1.24.3
 
 require (
 	github.com/demdxx/gocast/v2 v2.9.0
