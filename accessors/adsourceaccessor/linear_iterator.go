@@ -39,7 +39,6 @@ func (iter *linearIterator) setSourcesExt(request *adtype.BidRequest, sources []
 				source:   src,
 			}
 		})
-	iter.endIndex = len(iter.sources)
 	return iter
 }
 

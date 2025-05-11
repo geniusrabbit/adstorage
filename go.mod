@@ -5,7 +5,8 @@ go 1.24.3
 require (
 	github.com/demdxx/gocast/v2 v2.9.0
 	github.com/demdxx/xtypes v0.3.0
-	github.com/geniusrabbit/adcorelib v0.0.0-20250507124002-c596de5bf67f
+	github.com/geniusrabbit/adcorelib v0.0.0-20250511143814-ee19cdcc62f3
+	github.com/geniusrabbit/gosql/v2 v2.3.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	go.uber.org/zap v1.27.0
@@ -26,7 +27,6 @@ require (
 	github.com/bsm/openrtb/v3 v3.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/geniusrabbit/gogeo v0.0.0-20190430153311-59b5dca35b92 // indirect
-	github.com/geniusrabbit/gosql/v2 v2.3.1 // indirect
 	github.com/geniusrabbit/hourstable v0.0.0-20190430155716-2ecc19b9622f // indirect
 	github.com/geniusrabbit/udetect v0.0.0-20250425134628-4a4f1fa5c991 // indirect
 	github.com/go-sql-driver/mysql v1.9.2 // indirect
@@ -42,7 +42,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.28 // indirect
-	github.com/microsoft/go-mssqldb v1.8.0 // indirect
+	github.com/microsoft/go-mssqldb v1.8.1 // indirect
 	github.com/mileusna/useragent v1.3.5 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
