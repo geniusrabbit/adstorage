@@ -12,10 +12,10 @@ import (
 // It returns a float32 value representing the priority.
 // A higher value indicates a higher priority.
 // The function should return 0 if the source is not applicable for the request.
-type PriorityEval func(request *adtype.BidRequest, src adtype.Source) float32
+type PriorityEval func(request adtype.BidRequester, src adtype.Source) float32
 
 // NewPriorityIterator from request and source
-func NewPriorityIterator(request *adtype.BidRequest, sources []adtype.Source, priorEval PriorityEval) iter.Seq2[float32, adtype.Source] {
+func NewPriorityIterator(request adtype.BidRequester, sources []adtype.Source, priorEval PriorityEval) iter.Seq2[float32, adtype.Source] {
 	return (&linearIterator{
 		started:  false,
 		index:    0,

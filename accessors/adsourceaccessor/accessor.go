@@ -20,7 +20,7 @@ import (
 var errUnsupportedSourceProtocol = errors.New("unsupported source protocol")
 
 // CustomIteratorFnk is a function type for custom iterator
-type CustomIteratorFnk func(request *adtype.BidRequest, sources []adtype.Source) adtype.SourceIterator
+type CustomIteratorFnk func(request adtype.BidRequester, sources []adtype.Source) adtype.SourceIterator
 
 // SourceFactory is a source factory interface
 type SourceFactory = adtype.SourceFactory
@@ -62,13 +62,13 @@ func NewAccessor[AccType any](
 	}
 	accessor.DataAccessor = *generalaccessor.NewDataAccessor(
 		dataAccessor,
-		func(src *models.RTBSource) (adtype.Source, bool) {
+		func(ctx context.Context, src *models.RTBSource) (adtype.Source, bool) {
 			if src.AccountID == 0 {
 				ctxlogger.Get(ctx).Error("source without account",
 					zap.Uint64("source_id", src.ID))
 				return nil, false
 			}
-			acc, _ := accountAccessor.AccountByID(src.AccountID)
+			acc, _ := accountAccessor.AccountByID(ctx, src.AccountID)
 			if acc == nil {
 				ctxlogger.Get(ctx).Error("source without account object",
 					zap.Uint64("source_id", src.ID),
@@ -100,13 +100,13 @@ func (acc *Accessor[AT]) FactoryList() []SourceFactory {
 }
 
 // SourceList returns list of sources
-func (acc *Accessor[AT]) SourceList() ([]adtype.Source, error) {
-	return acc.List()
+func (acc *Accessor[AT]) SourceList(ctx context.Context) ([]adtype.Source, error) {
+	return acc.List(ctx)
 }
 
 // Iterator returns the configured queue acc
-func (acc *Accessor[AT]) Iterator(request *adtype.BidRequest) adtype.SourceIterator {
-	list, _ := acc.SourceList()
+func (acc *Accessor[AT]) Iterator(request adtype.BidRequester) adtype.SourceIterator {
+	list, _ := acc.SourceList(request.Context())
 	if acc.customIterator != nil {
 		return acc.customIterator(request, list)
 	}
@@ -114,8 +114,8 @@ func (acc *Accessor[AT]) Iterator(request *adtype.BidRequest) adtype.SourceItera
 }
 
 // SourceByID returns source instance
-func (acc *Accessor[AT]) SourceByID(id uint64) (adtype.Source, error) {
-	return acc.ByKey(id)
+func (acc *Accessor[AT]) SourceByID(ctx context.Context, id uint64) (adtype.Source, error) {
+	return acc.ByKey(ctx, id)
 }
 
 func (acc *Accessor[AT]) newSource(ctx context.Context, src *admodels.RTBSource) (adtype.Source, error) {
@@ -130,8 +130,8 @@ func (acc *Accessor[AT]) newSource(ctx context.Context, src *admodels.RTBSource)
 }
 
 // SetTimeout for sourcer
-func (acc *Accessor[AT]) SetTimeout(timeout time.Duration) {
-	list, _ := acc.SourceList()
+func (acc *Accessor[AT]) SetTimeout(ctx context.Context, timeout time.Duration) {
+	list, _ := acc.SourceList(ctx)
 	for _, src := range list {
 		if srcSetTM, _ := src.(adtype.SourceTimeoutSetter); srcSetTM != nil {
 			srcSetTM.SetTimeout(timeout)

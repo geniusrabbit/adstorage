@@ -20,7 +20,7 @@ type linearIterator struct {
 }
 
 // NewLinearIterator from request and source
-func NewLinearIterator(request *adtype.BidRequest, sources []adtype.Source) iter.Seq2[float32, adtype.Source] {
+func NewLinearIterator(request adtype.BidRequester, sources []adtype.Source) iter.Seq2[float32, adtype.Source] {
 	return (&linearIterator{
 		started:  false,
 		index:    0,
@@ -28,7 +28,7 @@ func NewLinearIterator(request *adtype.BidRequest, sources []adtype.Source) iter
 	}).setSourcesExt(request, sources).seq()
 }
 
-func (iter *linearIterator) setSourcesExt(request *adtype.BidRequest, sources []adtype.Source) *linearIterator {
+func (iter *linearIterator) setSourcesExt(request adtype.BidRequester, sources []adtype.Source) *linearIterator {
 	iter.sources = xtypes.SliceApply(
 		xtypes.Slice[adtype.Source](sources).Filter(func(src adtype.Source) bool {
 			return src != nil && request.SourceFilterCheck(src.ID()) && src.Test(request)

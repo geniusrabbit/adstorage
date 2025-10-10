@@ -1,6 +1,8 @@
 package accountaccessor
 
 import (
+	"context"
+
 	"github.com/geniusrabbit/adcorelib/admodels"
 
 	"github.com/geniusrabbit/adstorage/accessors/generalaccessor"
@@ -25,11 +27,11 @@ func NewAccessor[AT any](dataAccessor loader.DataAccessor[AT], accountConvert Ac
 }
 
 // CompanyList returns list of prepared data
-func (acc *AccountAccessor[AT]) CompanyList() ([]*admodels.Account, error) {
-	return acc.List()
+func (acc *AccountAccessor[AT]) CompanyList(ctx context.Context) ([]*admodels.Account, error) {
+	return acc.List(ctx)
 }
 
 // AccountByID returns account object with specific ID
-func (acc *AccountAccessor[AT]) AccountByID(id uint64) (*admodels.Account, error) {
-	return acc.ByKey(id)
+func (acc *AccountAccessor[AT]) AccountByID(ctx context.Context, id uint64) (*admodels.Account, error) {
+	return acc.ByKey(ctx, id)
 }

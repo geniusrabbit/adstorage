@@ -1,6 +1,8 @@
 package zoneaccessor
 
 import (
+	"context"
+
 	"github.com/geniusrabbit/adcorelib/adtype"
 	"github.com/geniusrabbit/adcorelib/models"
 
@@ -20,8 +22,8 @@ func NewZoneAccessor[AccType any](dataAccessor loader.DataAccessor[models.Zone],
 	return &ZoneAccessor{
 		DataAccessor: *generalaccessor.NewDataAccessor(
 			dataAccessor,
-			func(st *models.Zone) (adtype.Target, bool) {
-				acc, _ := accountAccessor.AccountByID(st.AccountID)
+			func(ctx context.Context, st *models.Zone) (adtype.Target, bool) {
+				acc, _ := accountAccessor.AccountByID(ctx, st.AccountID)
 				trg := targetFromModel(st, acc)
 				return trg, true
 			},
@@ -30,13 +32,13 @@ func NewZoneAccessor[AccType any](dataAccessor loader.DataAccessor[models.Zone],
 }
 
 // ZoneList returns list of prepared data
-func (acc *ZoneAccessor) ZoneList() ([]adtype.Target, error) {
-	return acc.List()
+func (acc *ZoneAccessor) ZoneList(ctx context.Context) ([]adtype.Target, error) {
+	return acc.List(ctx)
 }
 
 // TargetByCodename returns campaign object with specific codename
-func (acc *ZoneAccessor) TargetByCodename(codename string) (adtype.Target, error) {
-	return acc.ByKey(codename)
+func (acc *ZoneAccessor) TargetByCodename(ctx context.Context, codename string) (adtype.Target, error) {
+	return acc.ByKey(ctx, codename)
 }
 
 // TargetFromModel convert datavase model specified model

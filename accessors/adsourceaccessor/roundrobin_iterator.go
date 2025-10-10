@@ -10,7 +10,7 @@ import (
 )
 
 // NewRoundrobinIterator from request and source
-func NewRoundrobinIterator(request *adtype.BidRequest, sources []adtype.Source) iter.Seq2[float32, adtype.Source] {
+func NewRoundrobinIterator(request adtype.BidRequester, sources []adtype.Source) iter.Seq2[float32, adtype.Source] {
 	startIndex := rand.Int() % len(sources)
 	return (&linearIterator{
 		started:  false,

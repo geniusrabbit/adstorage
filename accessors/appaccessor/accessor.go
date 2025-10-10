@@ -1,6 +1,7 @@
 package appaccessor
 
 import (
+	"context"
 	"strings"
 
 	"github.com/geniusrabbit/adcorelib/admodels"
@@ -22,8 +23,8 @@ func NewAppAccessor[AccType any](dataAccessor loader.DataAccessor[models.Applica
 	return &AppAccessor{
 		DataAccessor: *generalaccessor.NewDataAccessor(
 			dataAccessor,
-			func(app *models.Application) (*admodels.Application, bool) {
-				acc, _ := accountAccessor.AccountByID(app.AccountID)
+			func(ctx context.Context, app *models.Application) (*admodels.Application, bool) {
+				acc, _ := accountAccessor.AccountByID(ctx, app.AccountID)
 				napp := admodels.ApplicationFromModel(app)
 				napp.Account = acc
 				return &napp, true
@@ -33,14 +34,14 @@ func NewAppAccessor[AccType any](dataAccessor loader.DataAccessor[models.Applica
 }
 
 // AppList returns list of prepared data
-func (acc *AppAccessor) AppList() ([]*admodels.Application, error) {
-	return acc.List()
+func (acc *AppAccessor) AppList(ctx context.Context) ([]*admodels.Application, error) {
+	return acc.List(ctx)
 }
 
 // AppByURI returns application object with specific URI
 // If not found, try to find by part of URI
-func (acc *AppAccessor) AppByURI(uri string) (*admodels.Application, error) {
-	app, err := acc.ByKey(uri)
+func (acc *AppAccessor) AppByURI(ctx context.Context, uri string) (*admodels.Application, error) {
+	app, err := acc.ByKey(ctx, uri)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +54,7 @@ func (acc *AppAccessor) AppByURI(uri string) (*admodels.Application, error) {
 			break
 		}
 		uri = uri[idx+1:]
-		if app, err = acc.ByKey(uri); err != nil {
+		if app, err = acc.ByKey(ctx, uri); err != nil {
 			return nil, err
 		}
 		if app != nil && app.Type != types.ApplicationSite {
