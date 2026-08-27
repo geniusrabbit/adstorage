@@ -31,7 +31,7 @@ func NewLinearIterator(request adtype.BidRequester, sources []adtype.Source) ite
 func (iter *linearIterator) setSourcesExt(request adtype.BidRequester, sources []adtype.Source) *linearIterator {
 	iter.sources = xtypes.SliceApply(
 		xtypes.Slice[adtype.Source](sources).Filter(func(src adtype.Source) bool {
-			return src != nil && request.SourceFilterCheck(src.ID()) && src.Test(request)
+			return src != nil && request.SourceFilterCheck(src.ID()) && src.Test(request) == nil
 		}),
 		func(src adtype.Source) sourceItem {
 			return sourceItem{

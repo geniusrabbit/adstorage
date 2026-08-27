@@ -27,7 +27,7 @@ func NewPriorityIterator(request adtype.BidRequester, sources []adtype.Source, p
 			}
 		}).Filter(func(src sourceItem) bool {
 			return src.priority > 0 && src.source != nil &&
-				request.SourceFilterCheck(src.source.ID()) && src.source.Test(request)
+				request.SourceFilterCheck(src.source.ID()) && src.source.Test(request) == nil
 		}),
 	}).seq()
 }
